@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Wife ❤️</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff5f7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Keeps everything on one screen */
+            text-align: center;
+        }
+
+        /* Falling Hearts/Flowers Animation */
+        .falling {
+            position: fixed;
+            top: -10%;
+            z-index: -1;
+            user-select: none;
+            animation: fall linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        #container {
+            background: white;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 85%;
+            z-index: 10;
+            position: relative;
+        }
+
+        h1 { color: #d63384; font-size: 2rem; margin-bottom: 20px; }
+        .hint { color: #888; font-size: 0.85rem; margin-top: 15px; }
+
+        /* Buttons Area */
+        .btn-group { 
+            margin-top: 30px; 
+            display: flex; 
+            justify-content: center; 
+            gap: 20px; 
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        #yesBtn, #agreeBtn { 
+            background-color: #ff4d6d; 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+        
+        #yesBtn:hover, #agreeBtn:hover { 
+            transform: scale(1.05); 
+            background-color: #e01e37; 
+        }
+
+        /* The Tricky No Button */
+        #noBtn { 
+            background-color: #f1f3f5; 
+            color: #495057; 
+            /* Start as a normal button, JS will make it 'fixed' when moving */
+            position: relative; 
+        }
+
+        /* Hidden Utility */
+        .hidden { display: none !important; }
+
+        /* Page 2 Styles */
+        ul { text-align: left; padding-left: 0; list-style: none; margin: 20px 0; }
+        li { margin: 12px 0; font-size: 1rem; color: #555; display: flex; align-items: flex-start; }
+        li::before { content: "❤️"; margin-right: 10px; font-size: 0.8rem; margin-top: 4px; color: #ff4d6d; }
+        .effective { font-style: italic; color: #999; margin-bottom: 25px; font-size: 0.9rem; }
+
+        /* Page 3 Styles */
+        .emoji-big { font-size: 80px; margin: 20px 0; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+        
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="container">
+        
+        <div id="page1">
+            <h1>Will you be my Valentine? 🌹</h1>
+            <div class="btn-group">
+                <button id="yesBtn" onclick="goToPage2()">YES ✔️</button>
+                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">NO 💔</button>
+            </div>
+            <p class="hint">Hint: The 'No' button is very slippery... 🧈</p>
+        </div>
+
+        <div id="page2" class="hidden">
+            <h2>Terms of Love 📝</h2>
+            <p style="font-size: 0.95rem; color: #666;">By clicking YES, you agree to:</p>
+            <ul>
+                <li>Unlimited cuddles, surprise hugs & kisses</li>
+                <li>Sharing chocolates & hoodies (mostly yours)</li>
+                <li>Walking through life together, hand in hand</li>
+                <li>Being loved unconditionally, forever</li>
+            </ul>
+            <p class="effective">*Valid for eternity, starting now.</p>
+            <button id="agreeBtn" onclick="goToPage3()">YES, I Agree! ✍️</button>
+        </div>
+
+        <div id="page3" class="hidden">
+            <h1>Yay! Good Choice! 🎉</h1>
+            <div class="emoji-big">💑</div>
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #444;">
+                That’s the best decision you’ve ever made!<br>
+                <strong>I love you! ❤️</strong>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- LOGIC TO MOVE THE BUTTON ---
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            
+            // 1. Change position to 'fixed' so it can move anywhere on screen
+            btn.style.position = 'fixed';
+            
+            // 2. Calculate random position within the window (subtracting button size to keep it visible)
+            // We use 90% of width/height to ensure it doesn't go too close to the edge
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 20);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 20);
+
+            // 3. Apply new coordinates
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            
+            // 4. Change text to crying face
+            btn.innerHTML = "NO 😭";
+            
+            // 5. Reset z-index to make sure it floats above everything
+            btn.style.zIndex = "1000";
+        }
+
+        // --- PAGE NAVIGATION ---
+        function goToPage2() {
+            // Play Music
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.5;
+            music.play().catch(error => console.log("User must interact first"));
+
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+        }
+
+        function goToPage3() {
+            document.getElementById('page2').classList.add('hidden');
+            document.getElementById('page3').classList.remove('hidden');
+            
+            // Start Flower Shower
+            startCelebration();
+        }
+
+        // --- ANIMATIONS ---
+        function createFallingItem(text) {
+            const item = document.createElement('div');
+            item.classList.add('falling');
+            item.innerHTML = text;
+            item.style.left = Math.random() * 100 + 'vw';
+            item.style.fontSize = Math.random() * 20 + 20 + 'px';
+            item.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(item);
+
+            setTimeout(() => { item.remove(); }, 5000);
+        }
+
+        function startCelebration() {
+            setInterval(() => {
+                const items = ['🌸', '🌹', '❤️', '✨', '💖'];
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                createFallingItem(randomItem);
+            }, 200);
+        }
+
+        // Start subtle hearts immediately
+        setInterval(() => createFallingItem('❤️'), 800);
+
+    </script>
+</body>
+</html>
